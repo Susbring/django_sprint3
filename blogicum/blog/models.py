@@ -1,14 +1,14 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 
-from blog.constants import MAX_LENGTH
+from blog.constants import MAX_LENGTH_TITLE
 
 
 User = get_user_model()
 
 
 class Category(models.Model):
-    title = models.CharField('Заголовок', max_length=MAX_LENGTH)
+    title = models.CharField('Заголовок', max_length=MAX_LENGTH_TITLE)
     description = models.TextField('Описание')
     slug = models.SlugField(
         'Идентификатор',
@@ -32,7 +32,7 @@ class Category(models.Model):
 
 
 class Location(models.Model):
-    name = models.CharField('Название места', max_length=MAX_LENGTH)
+    name = models.CharField('Название места', max_length=MAX_LENGTH_TITLE)
     created_at = models.DateTimeField('Добавлено', auto_now_add=True)
     is_published = models.BooleanField('Опубликовано', default=True)
 
@@ -46,7 +46,7 @@ class Location(models.Model):
 
 
 class Post(models.Model):
-    title = models.CharField('Заголовок', max_length=MAX_LENGTH)
+    title = models.CharField('Заголовок', max_length=MAX_LENGTH_TITLE)
     text = models.TextField('Текст')
     pub_date = models.DateTimeField(
         'Дата и время публикации',
@@ -56,19 +56,19 @@ class Post(models.Model):
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='post',
+        related_name='posts',
         verbose_name='Автор публикации'
     )
     location = models.ForeignKey(
         Location,
-        related_name='post',
+        related_name='posts',
         null=True,
         on_delete=models.SET_NULL,
         verbose_name='Местоположение'
     )
     category = models.ForeignKey(
         Category,
-        related_name='post',
+        related_name='posts',
         null=True,
         on_delete=models.SET_NULL,
         verbose_name='Категория'
